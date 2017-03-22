@@ -401,7 +401,7 @@ public class Robot extends SampleRobot {
 			Climbing(stick1.getRawButton(11), false);
 			Throwing(stick1.getRawButton(1));
 			if (stick1.getRawButton(2)) {
-				sweeper.set(1.0);
+				sweeper.set(0.2);
 			} else {
 				sweeper.set(0.0);
 			}
