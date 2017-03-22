@@ -322,7 +322,7 @@ public class Robot extends SampleRobot {
 		System.out.println(stringIn.toString());
 		stringIn.setLength(0);
 	}*/
-	 
+	
 	@Override
 	public void robotInit() {
 		server = CameraServer.getInstance();
