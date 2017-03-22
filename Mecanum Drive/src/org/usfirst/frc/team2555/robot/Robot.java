@@ -19,7 +19,7 @@ import org.usfirst.frc.team2555.robot.RobotDrive.MotorType;
 //import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 //import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.*;
-
+import org.usfirst.frc.team2555.robot.GearArm;
 import org.usfirst.frc.team2555.robot.LightControl;
 
 //import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -63,8 +63,9 @@ public class Robot extends SampleRobot {
 	fRightPID = new PIDSpeedController(encFR);
 	fLeftPID = new PIDSpeedController(encFL);
 	bLeftPID = new PIDSpeedController(encBL);*/
-	Solenoid gearGripper = new Solenoid(2);
-	DoubleSolenoid gearArm = new DoubleSolenoid(0,1);
+	// Obsoleted by GearArm class    Solenoid gearGripper = new Solenoid(2);
+	//DoubleSolenoid gearArm = new DoubleSolenoid(0,1);
+	//GearArm 
 	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	double goalAngle = 0.0;
 	boolean cameraToggle = false;
@@ -120,6 +121,7 @@ public class Robot extends SampleRobot {
 		
 	}
 	
+	//obsoleted by CameraAbsolute
 	public void ChangeCamCW() {
 		cameraNum = ( cameraNum + 1 ) % 4;
 		CameraRefresh();
@@ -159,6 +161,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
+	//obsoleted by CameraAbsolute
 	public void CameraRotational() {
 		/*if (stick1.getRawButton(4) && !button4){
 			ChangeCamCCW();
@@ -227,11 +230,12 @@ public class Robot extends SampleRobot {
 		return valueOut;
 	}
 	
-	public void GripGears(boolean gripTheGear){
+	//obsoleted by GearArm class
+	/*public void GripGears(boolean gripTheGear) {
 		gearGripper.set(gripTheGear);
-	}
+	}*/
 	
-	public void MoveGearArm(boolean armDown, boolean armUp){
+	/*public void MoveGearArm(boolean armDown, boolean armUp){
 		if (armDown && !armUp){
 			gearArm.set(DoubleSolenoid.Value.kForward);
 		} else if (armUp && !armDown){
@@ -239,9 +243,9 @@ public class Robot extends SampleRobot {
 		} else {
 			gearArm.set(DoubleSolenoid.Value.kOff);
 		}
-	}
+	}*/
 	
-	public void DoTheToggleSweeper(){
+	public void DoTheToggleSweeper() {
 		if (sweeperToggle && stick1.getRawButton(11)) {  // Only execute once per Button push
 			  sweeperToggle = false;  // Prevents this section of code from being called again until the Button is released and re-pressed
 			  if (runningSweeper) {  // Decide which way to set the motor this time through (or use this as a motor value instead)
@@ -253,35 +257,35 @@ public class Robot extends SampleRobot {
 			  }
 			} else if(!stick1.getRawButton(11)) { 
 			    sweeperToggle = true; // Button has been released, so this allows a re-press to activate the code above.
-			}
+		}
 	}
 	
-	public void ToggleSweeper(boolean sweepOn, boolean sweepOff){
-		if (sweepOn && !sweepOff){
+	public void ToggleSweeper(boolean sweepOn, boolean sweepOff) {
+		if (sweepOn && !sweepOff) {
 			runningSweeper = true;
-		} else if (sweepOff && !sweepOn){
+		} else if (sweepOff && !sweepOn) {
 			runningSweeper = false;
 		}
 	}
 	
-	public void SweepBalls(){
-		if (runningSweeper){
+	public void SweepBalls() {
+		if (runningSweeper) {
 			sweeper.set(1.0);
 		} else {
 			sweeper.set(0.0);
 		}
 	}
 	
-	public int BoolToInt(boolean input){
-		if (input){
+	public int BoolToInt(boolean input) {
+		if (input) {
 			return 1;
 		} else {
 			return 0;
 		}
 	}
 	
-	public double BoolToDouble(boolean input){
-		if (input){
+	public double BoolToDouble(boolean input) {
+		if (input) {
 			return 1;
 		} else {
 			return 0;
@@ -290,25 +294,25 @@ public class Robot extends SampleRobot {
 	
 	//public double BoolToDouble(boolean convertThis) {}
 	
-	public double RotateRobot(double joyRotate, double gyroAngle){
+	public double RotateRobot(double joyRotate, double gyroAngle) {
 		goalAngle += 5 * SpeedPaddle(joyRotate);
 		double adjustment = (goalAngle - gyroAngle) * 0.05;
-		if (-1 <= adjustment && adjustment <= 1){
+		if (-1 <= adjustment && adjustment <= 1) {
 			return adjustment;
-		} else if (adjustment < -1){
+		} else if (adjustment < -1) {
 			return -1.0;
-		} else if (adjustment > 1){
+		} else if (adjustment > 1) {
 			return 1.0;
 		} else {
 			return 0.0;
 		}
 	}
 	
-	public double DeadzoneAdjustment(double joyInput, double deadzoneRadius){
+	public double DeadzoneAdjustment(double joyInput, double deadzoneRadius) {
 		return Math.copySign(Math.max(Math.abs(joyInput)-deadzoneRadius,0), joyInput) / (1-deadzoneRadius);
 	}
 	
-	public double SpeedPaddle(double whatYouArePuttingIn){
+	public double SpeedPaddle(double whatYouArePuttingIn) {
 		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.75 * stick1.getRawAxis(3));
 	}
 	
