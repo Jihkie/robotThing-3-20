@@ -98,8 +98,8 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(1.0);
-			throwRight.set(-1.0);
+			throwLeft.set(-1.0);
+			throwRight.set(1.0);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
