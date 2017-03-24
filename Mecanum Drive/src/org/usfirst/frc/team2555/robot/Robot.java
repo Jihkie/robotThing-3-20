@@ -398,7 +398,7 @@ public class Robot extends SampleRobot {
 			//buzzer.setRaw(toneValueThing1.intValue());
 			//buzzer.setBounds(2.037*0.2, 1.539*0.2, 1.513*0.2, 1.487*0.2, .989*0.2);
 			
-			Climbing(stick1.getRawButton(11), false);
+			Climbing(false, stick1.getRawButton(11));
 			Throwing(stick1.getRawButton(1));
 			if (stick1.getRawButton(2)) {
 				sweeper.set(1.0);
