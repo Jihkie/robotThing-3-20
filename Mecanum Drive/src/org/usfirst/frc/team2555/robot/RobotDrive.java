@@ -274,247 +274,6 @@ public class RobotDrive implements MotorSafety {
     setLeftRightMotorOutputs(leftOutput, rightOutput);
   }
 
-  /**
-   * Provide tank steering using the stored robot configuration. drive the robot using two joystick
-   * inputs. The Y-axis will be selected from each Joystick object.
-   *
-   * @param leftStick  The joystick to control the left side of the robot.
-   * @param rightStick The joystick to control the right side of the robot.
-   */
-  public void tankDrive(GenericHID leftStick, GenericHID rightStick) {
-    if (leftStick == null || rightStick == null) {
-      throw new NullPointerException("Null HID provided");
-    }
-    tankDrive(leftStick.getY(), rightStick.getY(), true);
-  }
-
-  /**
-   * Provide tank steering using the stored robot configuration. drive the robot using two joystick
-   * inputs. The Y-axis will be selected from each Joystick object.
-   *
-   * @param leftStick     The joystick to control the left side of the robot.
-   * @param rightStick    The joystick to control the right side of the robot.
-   * @param squaredInputs Setting this parameter to true decreases the sensitivity at lower speeds
-   */
-  public void tankDrive(GenericHID leftStick, GenericHID rightStick, boolean squaredInputs) {
-    if (leftStick == null || rightStick == null) {
-      throw new NullPointerException("Null HID provided");
-    }
-    tankDrive(leftStick.getY(), rightStick.getY(), squaredInputs);
-  }
-
-  /**
-   * Provide tank steering using the stored robot configuration. This function lets you pick the
-   * axis to be used on each Joystick object for the left and right sides of the robot.
-   *
-   * @param leftStick  The Joystick object to use for the left side of the robot.
-   * @param leftAxis   The axis to select on the left side Joystick object.
-   * @param rightStick The Joystick object to use for the right side of the robot.
-   * @param rightAxis  The axis to select on the right side Joystick object.
-   */
-  public void tankDrive(GenericHID leftStick, final int leftAxis, GenericHID rightStick,
-                        final int rightAxis) {
-    if (leftStick == null || rightStick == null) {
-      throw new NullPointerException("Null HID provided");
-    }
-    tankDrive(leftStick.getRawAxis(leftAxis), rightStick.getRawAxis(rightAxis), true);
-  }
-
-  /**
-   * Provide tank steering using the stored robot configuration. This function lets you pick the
-   * axis to be used on each Joystick object for the left and right sides of the robot.
-   *
-   * @param leftStick     The Joystick object to use for the left side of the robot.
-   * @param leftAxis      The axis to select on the left side Joystick object.
-   * @param rightStick    The Joystick object to use for the right side of the robot.
-   * @param rightAxis     The axis to select on the right side Joystick object.
-   * @param squaredInputs Setting this parameter to true decreases the sensitivity at lower speeds
-   */
-  public void tankDrive(GenericHID leftStick, final int leftAxis, GenericHID rightStick,
-                        final int rightAxis, boolean squaredInputs) {
-    if (leftStick == null || rightStick == null) {
-      throw new NullPointerException("Null HID provided");
-    }
-    tankDrive(leftStick.getRawAxis(leftAxis), rightStick.getRawAxis(rightAxis), squaredInputs);
-  }
-
-  /**
-   * Provide tank steering using the stored robot configuration. This function lets you directly
-   * provide joystick values from any source.
-   *
-   * @param leftValue     The value of the left stick.
-   * @param rightValue    The value of the right stick.
-   * @param squaredInputs Setting this parameter to true decreases the sensitivity at lower speeds
-   */
-  public void tankDrive(double leftValue, double rightValue, boolean squaredInputs) {
-
-    if (!kTank_Reported) {
-      HAL.report(tResourceType.kResourceType_RobotDrive, getNumMotors(),
-          tInstances.kRobotDrive_Tank);
-      kTank_Reported = true;
-    }
-
-    // square the inputs (while preserving the sign) to increase fine control
-    // while permitting full power
-    leftValue = limit(leftValue);
-    rightValue = limit(rightValue);
-    if (squaredInputs) {
-      if (leftValue >= 0.0) {
-        leftValue = leftValue * leftValue;
-      } else {
-        leftValue = -(leftValue * leftValue);
-      }
-      if (rightValue >= 0.0) {
-        rightValue = rightValue * rightValue;
-      } else {
-        rightValue = -(rightValue * rightValue);
-      }
-    }
-    setLeftRightMotorOutputs(leftValue, rightValue);
-  }
-
-  /**
-   * Provide tank steering using the stored robot configuration. This function lets you directly
-   * provide joystick values from any source.
-   *
-   * @param leftValue  The value of the left stick.
-   * @param rightValue The value of the right stick.
-   */
-  public void tankDrive(double leftValue, double rightValue) {
-    tankDrive(leftValue, rightValue, true);
-  }
-
-  /**
-   * Arcade drive implements single stick driving. Given a single Joystick, the class assumes the Y
-   * axis for the move value and the X axis for the rotate value. (Should add more information here
-   * regarding the way that arcade drive works.)
-   *
-   * @param stick         The joystick to use for Arcade single-stick driving. The Y-axis will be
-   *                      selected for forwards/backwards and the X-axis will be selected for
-   *                      rotation rate.
-   * @param squaredInputs If true, the sensitivity will be decreased for small values
-   */
-  public void arcadeDrive(GenericHID stick, boolean squaredInputs) {
-    // simply call the full-featured arcadeDrive with the appropriate values
-    arcadeDrive(stick.getY(), stick.getX(), squaredInputs);
-  }
-
-  /**
-   * Arcade drive implements single stick driving. Given a single Joystick, the class assumes the Y
-   * axis for the move value and the X axis for the rotate value. (Should add more information here
-   * regarding the way that arcade drive works.)
-   *
-   * @param stick The joystick to use for Arcade single-stick driving. The Y-axis will be selected
-   *              for forwards/backwards and the X-axis will be selected for rotation rate.
-   */
-  public void arcadeDrive(GenericHID stick) {
-    arcadeDrive(stick, true);
-  }
-
-  /**
-   * Arcade drive implements single stick driving. Given two joystick instances and two axis,
-   * compute the values to send to either two or four motors.
-   *
-   * @param moveStick     The Joystick object that represents the forward/backward direction
-   * @param moveAxis      The axis on the moveStick object to use for forwards/backwards (typically
-   *                      Y_AXIS)
-   * @param rotateStick   The Joystick object that represents the rotation value
-   * @param rotateAxis    The axis on the rotation object to use for the rotate right/left
-   *                      (typically X_AXIS)
-   * @param squaredInputs Setting this parameter to true decreases the sensitivity at lower speeds
-   */
-  public void arcadeDrive(GenericHID moveStick, final int moveAxis, GenericHID rotateStick,
-                          final int rotateAxis, boolean squaredInputs) {
-    double moveValue = moveStick.getRawAxis(moveAxis);
-    double rotateValue = rotateStick.getRawAxis(rotateAxis);
-
-    arcadeDrive(moveValue, rotateValue, squaredInputs);
-  }
-
-  /**
-   * Arcade drive implements single stick driving. Given two joystick instances and two axis,
-   * compute the values to send to either two or four motors.
-   *
-   * @param moveStick   The Joystick object that represents the forward/backward direction
-   * @param moveAxis    The axis on the moveStick object to use for forwards/backwards (typically
-   *                    Y_AXIS)
-   * @param rotateStick The Joystick object that represents the rotation value
-   * @param rotateAxis  The axis on the rotation object to use for the rotate right/left (typically
-   *                    X_AXIS)
-   */
-  public void arcadeDrive(GenericHID moveStick, final int moveAxis, GenericHID rotateStick,
-                          final int rotateAxis) {
-    arcadeDrive(moveStick, moveAxis, rotateStick, rotateAxis, true);
-  }
-
-  /**
-   * Arcade drive implements single stick driving. This function lets you directly provide
-   * joystick values from any source.
-   *
-   * @param moveValue     The value to use for forwards/backwards
-   * @param rotateValue   The value to use for the rotate right/left
-   * @param squaredInputs If set, decreases the sensitivity at low speeds
-   */
-  public void arcadeDrive(double moveValue, double rotateValue, boolean squaredInputs) {
-    // local variables to hold the computed PWM values for the motors
-    if (!kArcadeStandard_Reported) {
-      HAL.report(tResourceType.kResourceType_RobotDrive, getNumMotors(),
-          tInstances.kRobotDrive_ArcadeStandard);
-      kArcadeStandard_Reported = true;
-    }
-
-    double leftMotorSpeed;
-    double rightMotorSpeed;
-
-    moveValue = limit(moveValue);
-    rotateValue = limit(rotateValue);
-
-    if (squaredInputs) {
-      // square the inputs (while preserving the sign) to increase fine control
-      // while permitting full power
-      if (moveValue >= 0.0) {
-        moveValue = moveValue * moveValue;
-      } else {
-        moveValue = -(moveValue * moveValue);
-      }
-      if (rotateValue >= 0.0) {
-        rotateValue = rotateValue * rotateValue;
-      } else {
-        rotateValue = -(rotateValue * rotateValue);
-      }
-    }
-
-    if (moveValue > 0.0) {
-      if (rotateValue > 0.0) {
-        leftMotorSpeed = moveValue - rotateValue;
-        rightMotorSpeed = Math.max(moveValue, rotateValue);
-      } else {
-        leftMotorSpeed = Math.max(moveValue, -rotateValue);
-        rightMotorSpeed = moveValue + rotateValue;
-      }
-    } else {
-      if (rotateValue > 0.0) {
-        leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-        rightMotorSpeed = moveValue + rotateValue;
-      } else {
-        leftMotorSpeed = moveValue - rotateValue;
-        rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-      }
-    }
-
-    setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
-  }
-
-  /**
-   * Arcade drive implements single stick driving. This function lets you directly provide
-   * joystick values from any source.
-   *
-   * @param moveValue   The value to use for fowards/backwards
-   * @param rotateValue The value to use for the rotate right/left
-   */
-  public void arcadeDrive(double moveValue, double rotateValue) {
-    arcadeDrive(moveValue, rotateValue, true);
-  }
 
   /**
    * Drive method for Mecanum wheeled robots.
@@ -558,28 +317,23 @@ public class RobotDrive implements MotorSafety {
     wheelSpeeds[MotorType.kRearRight.value] = xIn + yIn - rotation;
     
     double rotationMultiplier = 1500; 
-    if(setToPower){
-    	m_frontLeftMotor.changeControlMode(TalonControlMode.PercentVbus);
-    	m_frontRightMotor.changeControlMode(TalonControlMode.PercentVbus);
-    	m_rearLeftMotor.changeControlMode(TalonControlMode.PercentVbus);
-    	m_rearRightMotor.changeControlMode(TalonControlMode.PercentVbus);
+    
+    /*m_frontLeftMotor.changeControlMode(TalonControlMode.Speed);
+    m_frontRightMotor.changeControlMode(TalonControlMode.Speed);
+    m_rearLeftMotor.changeControlMode(TalonControlMode.Speed);
+    m_rearRightMotor.changeControlMode(TalonControlMode.Speed);*/
     	
-    	normalize(wheelSpeeds);
-    	m_frontLeftMotor.set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
-    	m_frontRightMotor.set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
-    	m_rearLeftMotor.set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
-    	m_rearRightMotor.set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
-    } else {
-    	m_frontLeftMotor.changeControlMode(TalonControlMode.Speed);
-    	m_frontRightMotor.changeControlMode(TalonControlMode.Speed);
-    	m_rearLeftMotor.changeControlMode(TalonControlMode.Speed);
-    	m_rearRightMotor.changeControlMode(TalonControlMode.Speed);
-    	
-    	m_frontLeftMotor.set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput * rotationMultiplier);
-        m_frontRightMotor.set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput * rotationMultiplier);
-        m_rearLeftMotor.set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput * rotationMultiplier);
-        m_rearRightMotor.set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput * rotationMultiplier);
-    }
+    /*m_frontLeftMotor.set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput * rotationMultiplier);
+    m_frontRightMotor.set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput * rotationMultiplier);
+    m_rearLeftMotor.set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput * rotationMultiplier);
+    m_rearRightMotor.set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput * rotationMultiplier);
+    */
+    
+    m_frontLeftMotor.set(x - y + rotation);
+    m_frontRightMotor.set(-x - y - rotation);
+    m_rearLeftMotor.set(-x - y + rotation);
+    m_rearRightMotor.set(x - y - rotation);
+    
     if (m_safetyHelper != null) {
       m_safetyHelper.feed();
     }
@@ -627,21 +381,6 @@ public class RobotDrive implements MotorSafety {
     if (m_safetyHelper != null) {
       m_safetyHelper.feed();
     }
-  }
-
-  /**
-   * Holonomic Drive method for Mecanum wheeled robots.
-   *
-   * <p>This is an alias to mecanumDrive_Polar() for backward compatability
-   *
-   * @param magnitude The speed that the robot should drive in a given direction. [-1.0..1.0]
-   * @param direction The direction the robot should drive. The direction and maginitute are
-   *                  independent of the rotation rate.
-   * @param rotation  The rate of rotation for the robot that is completely independent of the
-   *                  magnitute or direction. [-1.0..1.0]
-   */
-  void holonomicDrive(double magnitude, double direction, double rotation) {
-    mecanumDrive_Polar(magnitude, direction, rotation);
   }
 
   /**
