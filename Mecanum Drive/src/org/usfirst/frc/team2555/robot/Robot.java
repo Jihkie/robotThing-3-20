@@ -65,7 +65,7 @@ public class Robot extends SampleRobot {
 	bLeftPID = new PIDSpeedController(encBL);*/
 	// Obsoleted by GearArm class    Solenoid gearGripper = new Solenoid(2);
 	//DoubleSolenoid gearArm = new DoubleSolenoid(0,1);
-	//GearArm 
+	GearArm gearArm = new GearArm(0, 1, 2); 
 	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	double goalAngle = 0.0;
 	boolean cameraToggle = false;
@@ -364,19 +364,20 @@ public class Robot extends SampleRobot {
 			
 			switch(cameraNum){
 			case 0 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, stick1.getRawButton(6));
+				//robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, !stick1.getRawButton(6));
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 1 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getX()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, stick1.getRawButton(6));
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 2 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, stick1.getRawButton(6));
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 3 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getY()) * 0.9, SpeedPaddle(stick1.getX()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, stick1.getRawButton(6));
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			}
@@ -385,8 +386,8 @@ public class Robot extends SampleRobot {
 			//System.out.println(robotDrive.m_frontLeftMotor.getClosedLoopError());
 			//robotDrive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.getZ(), 0);
 			
-			CameraRotational();
-			//CameraAbsolute(stick1.getPOV(0));
+			//CameraRotational();
+			CameraAbsolute(stick1.getPOV(0));
 			
 			NIVision.IMAQdxGrab(currentCam, frame, 1);
 			server.setImage(frame);
@@ -402,17 +403,36 @@ public class Robot extends SampleRobot {
 			//buzzer.setRaw(toneValueThing1.intValue());
 			//buzzer.setBounds(2.037*0.2, 1.539*0.2, 1.513*0.2, 1.487*0.2, .989*0.2);
 			
-			Climbing(stick1.getRawButton(11), false);
-			Throwing(stick1.getRawButton(1));
-			if (stick1.getRawButton(2)) {
+			Climbing(false, stick1.getRawButton(11));
+			//Throwing(stick1.getRawButton(1));
+			/*if (stick1.getRawButton(2)) {
 				sweeper.set(1.0);
 			} else {
 				sweeper.set(0.0);
-			}
+			}*/
 			
+			/*if(stick1.getRawButton(3)) {
+				gearArm.FullGearGrab();
+			}
+			if(stick1.getRawButton(5)) {
+				gearArm.GearRelease();
+			}*/
+			
+			if(stick1.getRawButton(5)) {
+				gearArm.GearArmDown();
+			}
+			if(stick1.getRawButton(4)) {
+				gearArm.GearArmUp();
+			}
+			if(stick1.getRawButton(3)) {
+				gearArm.GearGrab();
+			}
+			if(stick1.getRawButton(6)) {
+				gearArm.GearRelease();
+			}
 			//LED.SetLights(BoolToInt(stick1.getRawButton(7))*255, BoolToInt(stick1.getRawButton(9))*255, BoolToInt(stick1.getRawButton(11))*255);
 			
-			if(stick1.getRawButton(7)){
+			/*if(stick1.getRawButton(7)){
 				//LED.SetLights(0.0, 0.0, 0.0);
 				//LED.SetLights(0, 0, 0);
 				//LED.SetRed(0);
@@ -448,7 +468,7 @@ public class Robot extends SampleRobot {
 				//LED.SetBlue(4095);
 				LED.ScaleUpBlue();
 			}
-			LED.RefreshLights();
+			LED.RefreshLights();*/
 			//System.out.println(LED.redLight.getRawBounds().toString());
 			
 			Timer.delay(0.005); // wait 5ms to avoid hogging CPU cycles

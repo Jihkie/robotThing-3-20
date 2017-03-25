@@ -24,6 +24,7 @@ public class GearArm {
 	}
 	public void GearRelease() {
 		gearGrabber.set(false);
+		gearIsGrabbed = false;
 	}
 	
 	public void FullGearGrab() {
