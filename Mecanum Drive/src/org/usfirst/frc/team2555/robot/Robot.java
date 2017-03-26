@@ -414,7 +414,7 @@ public class Robot extends SampleRobot {
 			Throwing(stick1.getRawButton(1));
 			BallPaddle(stick1.getRawButton(9),stick1.getRawButton(10));
 			if (stick1.getRawButton(2)) {
-				sweeper.set(0.5);
+				sweeper.set(-0.5);
 			} else {
 				sweeper.set(0.0);
 			}
