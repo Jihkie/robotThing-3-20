@@ -474,8 +474,11 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.005); // wait 5ms to avoid hogging CPU cycles
 		}
 	}
-	/* @Override
+	@Override
 	public void autonomous() {
-		This is the Autonomous code. write something here when we get to that point.
-	}*/
+		//This is the Autonomous code. write something here when we get to that point.
+		robotDrive.mecanumDrive_Cartesian(0.0, 0.5, 0, 0, false);
+		Timer.delay(3.0);
+		robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
+	}
 }
