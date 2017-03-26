@@ -99,31 +99,30 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(-0.5);
-			throwRight.set(0.5);
+			throwLeft.set(-0.6);
+			throwRight.set(0.6);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
 		}
 	}
 	
-	public void BallPaddle(boolean runPaddle) {
+	public void BallPaddle(boolean runPaddle, boolean runPaddleReverse) {
 		if (runPaddle) {
-			ballPaddle.set(-1.0);
+			ballPaddle.set(-0.6);
+		} else if (runPaddleReverse) {
+			ballPaddle.set(0.6);
 		} else {
 			ballPaddle.set(0);
 		}
 	}
 	
 	public void Climbing(boolean upState, boolean downState) {
-		if (upState && !downState){
-			//climbLeft.set(1.0);
+		if (upState && !downState) {
 			climbRight.set(1.0);
 		} else if (!upState && downState) {
-			//climbLeft.set(-1.0);
 			climbRight.set(-1.0);
 		} else {
-			//climbLeft.set(0.0);
 			climbRight.set(0.0);
 		}
 		
@@ -413,12 +412,12 @@ public class Robot extends SampleRobot {
 			
 			Climbing(false, stick1.getRawButton(11));
 			Throwing(stick1.getRawButton(1));
-			BallPaddle(stick1.getRawButton(9));
-			/*if (stick1.getRawButton(2)) {
-				sweeper.set(1.0);
+			BallPaddle(stick1.getRawButton(9),stick1.getRawButton(10));
+			if (stick1.getRawButton(2)) {
+				sweeper.set(0.5);
 			} else {
 				sweeper.set(0.0);
-			}*/
+			}
 			
 			/*if(stick1.getRawButton(3)) {
 				gearArm.FullGearGrab();
