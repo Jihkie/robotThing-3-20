@@ -109,12 +109,14 @@ public class RobotDrive implements MotorSafety {
 	  thisMotor.changeControlMode(TalonControlMode.Speed);
   }
   public void AddEncoderInfo(CANTalon thisMotor, StringBuilder stringIn){
-	  stringIn.append("\tout:");
-	  stringIn.append(thisMotor.getOutputVoltage() / thisMotor.getBusVoltage());
-	  stringIn.append("\tspd:");
-	  stringIn.append(thisMotor.getSpeed());
-	  stringIn.append("\terr:");
-	  stringIn.append(thisMotor.getClosedLoopError());
+	  stringIn.append("\tFL:");
+	  stringIn.append(Math.round(m_frontLeftMotor.getSpeed()));
+	  stringIn.append("\tFR:");
+	  stringIn.append(Math.round(m_frontRightMotor.getSpeed()));
+	  stringIn.append("\tBL:");
+	  stringIn.append(Math.round(m_rearLeftMotor.getSpeed()));
+	  stringIn.append("\tBR:");
+	  stringIn.append(Math.round(m_rearRightMotor.getSpeed()));
 	  System.out.println(stringIn.toString());
 	  stringIn.setLength(0);
   }

@@ -379,20 +379,20 @@ public class Robot extends SampleRobot {
 			
 			switch(cameraNum){
 			case 0 :
-				//robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, !stick1.getRawButton(6));
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
+				//robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 1 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 2 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 3 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			}
