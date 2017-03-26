@@ -40,7 +40,7 @@ public class Robot extends SampleRobot {
 	final int kRearRightChannel = 1;
 	Spark throwLeft = new Spark(4);
 	Spark throwRight = new Spark(5);
-	Talon climbLeft = new Talon(6);
+	Talon ballPaddle = new Talon(6);
 	Talon climbRight = new Talon(7);
 	Talon sweeper = new Talon(8);
 	int cameraNum = 0;
@@ -99,23 +99,31 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(1.0);
-			throwRight.set(-1.0);
+			throwLeft.set(-0.5);
+			throwRight.set(0.5);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
 		}
 	}
 	
+	public void BallPaddle(boolean runPaddle) {
+		if (runPaddle) {
+			ballPaddle.set(-1.0);
+		} else {
+			ballPaddle.set(0);
+		}
+	}
+	
 	public void Climbing(boolean upState, boolean downState) {
 		if (upState && !downState){
-			climbLeft.set(1.0);
+			//climbLeft.set(1.0);
 			climbRight.set(1.0);
 		} else if (!upState && downState) {
-			climbLeft.set(-1.0);
+			//climbLeft.set(-1.0);
 			climbRight.set(-1.0);
 		} else {
-			climbLeft.set(0.0);
+			//climbLeft.set(0.0);
 			climbRight.set(0.0);
 		}
 		
@@ -404,7 +412,8 @@ public class Robot extends SampleRobot {
 			//buzzer.setBounds(2.037*0.2, 1.539*0.2, 1.513*0.2, 1.487*0.2, .989*0.2);
 			
 			Climbing(false, stick1.getRawButton(11));
-			//Throwing(stick1.getRawButton(1));
+			Throwing(stick1.getRawButton(1));
+			BallPaddle(stick1.getRawButton(9));
 			/*if (stick1.getRawButton(2)) {
 				sweeper.set(1.0);
 			} else {
@@ -477,8 +486,10 @@ public class Robot extends SampleRobot {
 	@Override
 	public void autonomous() {
 		//This is the Autonomous code. write something here when we get to that point.
-		robotDrive.mecanumDrive_Cartesian(0.0, 0.5, 0, 0, false);
-		Timer.delay(3.0);
-		robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
+		long startTime = System.currentTimeMillis();
+		while (System.currentTimeMillis() - startTime < 3000) {
+			robotDrive.mecanumDrive_Cartesian(0.0, 0.5, 0, 0, false);
+		}
+		//robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
 	}
 }
