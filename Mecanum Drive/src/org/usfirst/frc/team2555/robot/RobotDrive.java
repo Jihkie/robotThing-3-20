@@ -143,10 +143,10 @@ public class RobotDrive implements MotorSafety {
     setupMotorSafety();
     drive(0, 0);
     
-    ConfigureForEncoder(m_rearLeftMotor, 0.0, 0.0, 0.0, 0.0);
-    ConfigureForEncoder(m_rearRightMotor, 0.0, 0.0, 0.0, 0.0);
-    ConfigureForEncoder(m_frontLeftMotor, 0.0, 0.0, 0.0, 0.0);
-    ConfigureForEncoder(m_frontRightMotor, 0.0, 0.0, 0.0, 0.0);
+    ConfigureForEncoder(m_rearLeftMotor, 0.1097, 0.22, 0.0, 0.0);
+    ConfigureForEncoder(m_rearRightMotor, 0.1097, 0.22, 0.0, 0.0);
+    ConfigureForEncoder(m_frontLeftMotor, 0.1097, 0.22, 0.0, 0.0);
+    ConfigureForEncoder(m_frontRightMotor, 0.1097, 0.22, 0.0, 0.0);
     
     /*m_rearRightMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
     m_rearLeftMotor.setFeedbackDevice(FeedbackDevice.QuadEncoder);

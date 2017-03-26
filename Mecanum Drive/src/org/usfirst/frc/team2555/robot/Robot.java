@@ -328,7 +328,7 @@ public class Robot extends SampleRobot {
 	}
 	
 	public double SpeedPaddle(double whatYouArePuttingIn) {
-		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.75 * stick1.getRawAxis(3));
+		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.5);
 	}
 	
 	/*public void AddEncoderInfo(CANTalon thisMotor, StringBuilder stringIn){
@@ -379,7 +379,7 @@ public class Robot extends SampleRobot {
 			
 			switch(cameraNum){
 			case 0 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
+				robotDrive.mecanumDrive_Cartesian(0, - SpeedPaddle(stick1.getRawAxis(3)) * 0.9, 0, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
