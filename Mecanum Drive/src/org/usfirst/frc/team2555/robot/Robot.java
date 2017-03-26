@@ -99,8 +99,8 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(-0.6);
-			throwRight.set(0.6);
+			throwLeft.set(-0.55);
+			throwRight.set(0.55);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
@@ -315,6 +315,14 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
+	public double DoesItUseTheGyro(boolean buttonThatSaysYes) {
+		if (buttonThatSaysYes) {
+			return gyro.getAngle();
+		} else {
+			return 0.0;
+		}
+	}
+	
 	public double DeadzoneAdjustment(double joyInput, double deadzoneRadius) {
 		return Math.copySign(Math.max(Math.abs(joyInput)-deadzoneRadius,0), joyInput) / (1-deadzoneRadius);
 	}
@@ -372,23 +380,27 @@ public class Robot extends SampleRobot {
 			switch(cameraNum){
 			case 0 :
 				//robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, !stick1.getRawButton(6));
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 1 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 2 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 3 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, 0, !stick1.getRawButton(7));
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			}
 			
+			if (stick1.getRawButton(7)) {
+				gyro.reset();
+				goalAngle = 0;
+			}
 			robotDrive.AddEncoderInfo(robotDrive.m_frontLeftMotor, encOut);
 			//System.out.println(robotDrive.m_frontLeftMotor.getClosedLoopError());
 			//robotDrive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.getZ(), 0);
@@ -414,7 +426,9 @@ public class Robot extends SampleRobot {
 			Throwing(stick1.getRawButton(1));
 			BallPaddle(stick1.getRawButton(9),stick1.getRawButton(10));
 			if (stick1.getRawButton(2)) {
-				sweeper.set(-0.5);
+				sweeper.set(-0.6);
+			} else  if (stick1.getRawButton(8)) {
+				sweeper.set(0.6);
 			} else {
 				sweeper.set(0.0);
 			}
