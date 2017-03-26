@@ -316,7 +316,7 @@ public class RobotDrive implements MotorSafety {
     wheelSpeeds[MotorType.kRearLeft.value] = -xIn + yIn + rotation;
     wheelSpeeds[MotorType.kRearRight.value] = xIn + yIn - rotation;
     
-    double rotationMultiplier = 1500; 
+    double rpm = 150; 
     
     /*m_frontLeftMotor.changeControlMode(TalonControlMode.Speed);
     m_frontRightMotor.changeControlMode(TalonControlMode.Speed);
@@ -329,10 +329,10 @@ public class RobotDrive implements MotorSafety {
     m_rearRightMotor.set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput * rotationMultiplier);
     */
     
-    m_frontLeftMotor.set(x - y + rotation);
-    m_frontRightMotor.set(-x - y - rotation);
-    m_rearLeftMotor.set(-x - y + rotation);
-    m_rearRightMotor.set(x - y - rotation);
+    m_frontLeftMotor.set((x - y + rotation) * rpm);
+    m_frontRightMotor.set((-x - y - rotation) * rpm);
+    m_rearLeftMotor.set((-x - y + rotation) * rpm);
+    m_rearRightMotor.set((x - y - rotation) * rpm);
     
     if (m_safetyHelper != null) {
       m_safetyHelper.feed();
