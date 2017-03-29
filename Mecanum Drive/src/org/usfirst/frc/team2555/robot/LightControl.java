@@ -17,7 +17,17 @@ public class LightControl {
 	protected int actualGrn;
 	protected int actualBlu;
 	
-	
+	public int[] colorValues = 
+		//{0,1,2,3,4,6,8,10,12,14,16,18,20,24,28,32,36,40,45,50,55,60,65,70,75,80,85,90,95,100,110,120,130,140,150,160,170,180,190,200,225,250,275,300,350,400};
+		{
+			0,2,5,10,20,50,150,250,500,750,1000,1500,2000,3000,4000,3000,2000,1500,1000,750,500,250,150,50,20,10,5,2
+		};
+	protected int stageRed = 0;
+	protected int stageGrn = 0;
+	protected int stageBlu = 0;
+	long ledTimerRed = -1000;
+	long ledTimerGrn = -1000;
+	long ledTimerBlu = -1000;
 	//========================LMAO THE RAW BOUNDS ARE 0-4095 NOT 0-255 IT UNDERFLOWS AT 4096================
 	public LightControl(int redCh, int grnCh, int bluCh){
 		redLight = new PWM(redCh);
@@ -137,6 +147,48 @@ public class LightControl {
 		}
 	}
 	
+	/**
+	 * advance the color cycle
+	 */
+	public void CycleRed() {
+		if (ledTimerRed == -1000) {
+			ledTimerRed = System.currentTimeMillis();
+		}
+		if (System.currentTimeMillis() - ledTimerRed < 500) {
+			++stageRed;
+			if (stageRed >= 28){
+				stageRed -= 28;
+			}
+			redLight.setRaw(colorValues[stageRed]);
+			ledTimerRed = System.currentTimeMillis();
+		}
+	}
+	public void CycleGrn() {
+		if (ledTimerGrn == -1000) {
+			ledTimerGrn = System.currentTimeMillis();
+		}
+		if (System.currentTimeMillis() - ledTimerGrn < 500) {
+			++stageGrn;
+			if (stageGrn >= 28){
+				stageGrn -= 28;
+			}
+			grnLight.setRaw(colorValues[stageGrn]);
+			ledTimerGrn = System.currentTimeMillis();
+		}
+	}
+	public void CycleBlu() {
+		if (ledTimerBlu == -1000) {
+			ledTimerBlu = System.currentTimeMillis();
+		}
+		if (System.currentTimeMillis() - ledTimerBlu < 500) {
+			++stageBlu;
+			if (stageBlu >= 28){
+				stageBlu -= 28;
+			}
+			bluLight.setRaw(colorValues[stageBlu]);
+			ledTimerBlu = System.currentTimeMillis();
+		}
+	}
 	
 	/**
 	 * Slowly fade a color on the LEDs

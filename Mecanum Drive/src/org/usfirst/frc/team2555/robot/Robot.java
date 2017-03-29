@@ -78,7 +78,7 @@ public class Robot extends SampleRobot {
 	final int kJoystick2Channel = 1;
 
 	Joystick stick1 = new Joystick(kJoystick1Channel);
-	//Joystick stick2 = new Joystick(kJoystick2Channel);
+	Joystick stick2 = new Joystick(kJoystick2Channel);
 
 	public Robot() {
 		robotDrive = new RobotDrive(kFrontLeftChannel, kRearLeftChannel, kFrontRightChannel, kRearRightChannel);
@@ -99,8 +99,8 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(-0.55);
-			throwRight.set(0.55);
+			throwLeft.set(-0.5);
+			throwRight.set(0.5);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
@@ -366,6 +366,7 @@ public class Robot extends SampleRobot {
 	public void operatorControl() {
 		robotDrive.setSafetyEnabled(false);
 		gyro.reset();
+		goalAngle = 0;
 		//final CameraServer cams = CameraServer.getInstance();
 		//cams.startAutomaticCapture("cam0");
 		//================we changed this from true because some people on the internet told us to
@@ -379,20 +380,20 @@ public class Robot extends SampleRobot {
 			
 			switch(cameraNum){
 			case 0 :
-				robotDrive.mecanumDrive_Cartesian(0, - SpeedPaddle(stick1.getRawAxis(3)) * 0.9, 0, 0, true);
-				//robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - SpeedPaddle(stick1.getZ()) * 0.9, gyro.getAngle(), true);
+				//robotDrive.mecanumDrive_Cartesian(0, - SpeedPaddle(stick1.getRawAxis(3)) * 0.9, 0, 0, true);
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 1 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 2 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 3 :
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.9, 0, true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			}
@@ -493,6 +494,16 @@ public class Robot extends SampleRobot {
 			LED.RefreshLights();*/
 			//System.out.println(LED.redLight.getRawBounds().toString());
 			
+			if (stick2.getRawButton(4)) {
+				LED.CycleRed();
+			}
+			if (stick2.getRawButton(3)) {
+				LED.CycleGrn();
+			}
+			if (stick2.getRawButton(5)) {
+				LED.CycleBlu();
+			}
+			
 			Timer.delay(0.005); // wait 5ms to avoid hogging CPU cycles
 		}
 	}
@@ -500,9 +511,9 @@ public class Robot extends SampleRobot {
 	public void autonomous() {
 		//This is the Autonomous code. write something here when we get to that point.
 		long startTime = System.currentTimeMillis();
-		while (System.currentTimeMillis() - startTime < 3000) {
-			robotDrive.mecanumDrive_Cartesian(0.0, 0.5, 0, 0, false);
+		while (System.currentTimeMillis() - startTime < 2000) {
+			robotDrive.mecanumDrive_Cartesian(0.0, 0.1, 0, 0, false);
 		}
-		//robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
+		robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
 	}
 }
