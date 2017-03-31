@@ -70,7 +70,7 @@ public class Robot extends SampleRobot {
 	GearArm gearArm = new GearArm(0, 1, 2); 
 	public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	public static BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
-	public EulerDistanceEstimator euler = new EulerDistanceEstimator(ForwardAxis.NegY);
+	public EulerDistanceEstimator euler = new EulerDistanceEstimator(accelerometer, ForwardAxis.NegY);
 	double goalAngle = 0.0;
 	boolean cameraToggle = false;
 	boolean sweeperToggle = false;
@@ -359,8 +359,8 @@ public class Robot extends SampleRobot {
 		NIVision.IMAQdxStartAcquisition(currentCam);
 		//CameraServer.getInstance().startAutomaticCapture("cam0");;
 		
-		
-		
+		euler.reset();
+		euler.autoInit();
 	}
 	
 	/**
@@ -369,8 +369,9 @@ public class Robot extends SampleRobot {
 	@Override
 	public void operatorControl() {
 		robotDrive.setSafetyEnabled(false);
-		gyro.reset();
+		//gyro.reset();
 		goalAngle = 0;
+		
 		//final CameraServer cams = CameraServer.getInstance();
 		//cams.startAutomaticCapture("cam0");
 		//================we changed this from true because some people on the internet told us to
@@ -402,11 +403,15 @@ public class Robot extends SampleRobot {
 				break;
 			}
 			
+			if (DeadzoneAdjustment(stick1.getX(), 0.1) == 0.0 && DeadzoneAdjustment(stick1.getY(), 0.1) == 0.0) {
+				euler.reset();
+			}
+			
 			if (stick1.getRawButton(7)) {
 				gyro.reset();
 				goalAngle = 0;
 			}
-			robotDrive.AddEncoderInfo(robotDrive.m_frontLeftMotor, encOut);
+			//robotDrive.AddEncoderInfo(robotDrive.m_frontLeftMotor, encOut);
 			//System.out.println(robotDrive.m_frontLeftMotor.getClosedLoopError());
 			//robotDrive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), stick.getZ(), 0);
 			
@@ -426,6 +431,8 @@ public class Robot extends SampleRobot {
 			//Double toneValueThing5 = Math.floor((stick1.getY() + 1) * 128);
 			//buzzer.setRaw(toneValueThing1.intValue());
 			//buzzer.setBounds(2.037*0.2, 1.539*0.2, 1.513*0.2, 1.487*0.2, .989*0.2);
+			euler.update();
+			System.out.println(euler.getDisplacement());
 			
 			Climbing(false, stick1.getRawButton(11));
 			Throwing(stick1.getRawButton(1));

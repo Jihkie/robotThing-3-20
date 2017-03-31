@@ -23,7 +23,7 @@ public class EulerDistanceEstimator {
         NegZ
     }
 
-//    private Accelerometer _accelSensor;
+    private Accelerometer _accelSensor;
     private ForwardAxis _forwardAxis;
 
     private double _velocity;
@@ -35,8 +35,8 @@ public class EulerDistanceEstimator {
      * @param accelerometer The accelerometer objects that is used to approximate
      * @param forwardAxis The axis of the accelerometer that points forward
      */
-    public EulerDistanceEstimator(ForwardAxis forwardAxis){ //Accelerometer accelerometer, ForwardAxis forwardAxis) {
-//        this._accelSensor = accelerometer;
+    public EulerDistanceEstimator(Accelerometer accelerometer, ForwardAxis forwardAxis) {
+        this._accelSensor = accelerometer;
         this._forwardAxis = forwardAxis;
 
         this._eTimer = new Timer();
@@ -124,31 +124,31 @@ public class EulerDistanceEstimator {
      * per second.
      * @return Current acceleration in m/s/s
      */
-//    public double getAcceleration() {
-//        double Gs = 0;
-//
-//        switch(this._forwardAxis) {
-//            case X:
-//                Gs = this._accelSensor.getX();
-//            case NegX:
-//                Gs = this._accelSensor.getX() * -1;
-//                break;
-//            case Y:
-//                Gs = this._accelSensor.getY();
-//                break;
-//            case NegY:
-//                Gs = this._accelSensor.getY() * -1;
-//                break;
-//            case Z:
-//                Gs = this._accelSensor.getZ();
-//                break;
-//            case NegZ:
-//                Gs = this._accelSensor.getZ() * -1;
-//                break;
-//        }
-//
-//        // One "g" is 9.81m/s/s
-//        return Gs * 9.81;
-//    }
+    public double getAcceleration() {
+        double Gs = 0;
+
+        switch(this._forwardAxis) {
+            case X:
+                Gs = this._accelSensor.getX();
+            case NegX:
+                Gs = this._accelSensor.getX() * -1;
+                break;
+            case Y:
+                Gs = this._accelSensor.getY();
+                break;
+            case NegY:
+                Gs = this._accelSensor.getY() * -1;
+                break;
+            case Z:
+                Gs = this._accelSensor.getZ();
+                break;
+            case NegZ:
+                Gs = this._accelSensor.getZ() * -1;
+                break;
+        }
+
+        // One "g" is 9.81m/s/s
+        return Gs * 9.81;
+    }
 
 }
