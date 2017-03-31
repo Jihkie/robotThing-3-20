@@ -19,6 +19,8 @@ import org.usfirst.frc.team2555.robot.RobotDrive.MotorType;
 //import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 //import edu.wpi.first.wpilibj.CANSpeedController;
 import edu.wpi.first.wpilibj.*;
+
+import org.usfirst.frc.team2555.robot.EulerDistanceEstimator.ForwardAxis;
 import org.usfirst.frc.team2555.robot.GearArm;
 import org.usfirst.frc.team2555.robot.LightControl;
 
@@ -66,7 +68,9 @@ public class Robot extends SampleRobot {
 	// Obsoleted by GearArm class    Solenoid gearGripper = new Solenoid(2);
 	//DoubleSolenoid gearArm = new DoubleSolenoid(0,1);
 	GearArm gearArm = new GearArm(0, 1, 2); 
-	ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+	public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+	public static BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
+	public EulerDistanceEstimator euler = new EulerDistanceEstimator(ForwardAxis.NegY);
 	double goalAngle = 0.0;
 	boolean cameraToggle = false;
 	boolean sweeperToggle = false;
@@ -99,8 +103,8 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(-0.5);
-			throwRight.set(0.5);
+			throwLeft.set(-0.6);
+			throwRight.set(0.6);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
@@ -302,7 +306,7 @@ public class Robot extends SampleRobot {
 	//public double BoolToDouble(boolean convertThis) {}
 	
 	public double RotateRobot(double joyRotate, double gyroAngle) {
-		goalAngle += 5 * SpeedPaddle(joyRotate);
+		goalAngle += 10 * SpeedPaddle(joyRotate);
 		double adjustment = (goalAngle - gyroAngle) * 0.05;
 		if (-1 <= adjustment && adjustment <= 1) {
 			return adjustment;
@@ -328,7 +332,7 @@ public class Robot extends SampleRobot {
 	}
 	
 	public double SpeedPaddle(double whatYouArePuttingIn) {
-		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.5);
+		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.75 * stick1.getZ());
 	}
 	
 	/*public void AddEncoderInfo(CANTalon thisMotor, StringBuilder stringIn){
@@ -381,19 +385,19 @@ public class Robot extends SampleRobot {
 			switch(cameraNum){
 			case 0 :
 				//robotDrive.mecanumDrive_Cartesian(0, - SpeedPaddle(stick1.getRawAxis(3)) * 0.9, 0, 0, true);
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()) * 0.9, - SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()), - SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 1 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 2 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			case 3 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()) * 0.9, SpeedPaddle(stick1.getY()) * 0.9, - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			}
@@ -511,8 +515,14 @@ public class Robot extends SampleRobot {
 	public void autonomous() {
 		//This is the Autonomous code. write something here when we get to that point.
 		long startTime = System.currentTimeMillis();
-		while (System.currentTimeMillis() - startTime < 2000) {
-			robotDrive.mecanumDrive_Cartesian(0.0, 0.1, 0, 0, false);
+		gyro.reset();
+		gearArm.GearGrab();
+		while (System.currentTimeMillis() - startTime < 2500) {
+			robotDrive.mecanumDrive_Cartesian(0.0, -0.1, - RotateRobot(0, gyro.getAngle()), 0, false);
+		}
+		gearArm.GearRelease();
+		while (System.currentTimeMillis() - startTime < 3500) {
+			robotDrive.mecanumDrive_Cartesian(0.0, 0.1, - RotateRobot(0, gyro.getAngle()), 0, false);
 		}
 		robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
 	}
