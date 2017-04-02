@@ -45,7 +45,7 @@ public class Robot extends SampleRobot {
 	Talon ballPaddle = new Talon(6);
 	Talon climbRight = new Talon(7);
 	Talon sweeper = new Talon(8);
-	int cameraNum = 0;
+	int cameraNum = 2;
 	int camFront;
 	int camRight;
 	int camBack;
@@ -353,11 +353,11 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
 		server = CameraServer.getInstance();
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		camFront = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-		camRight = NIVision.IMAQdxOpenCamera("cam1", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-		camBack = NIVision.IMAQdxOpenCamera("cam2", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-		camLeft = NIVision.IMAQdxOpenCamera("cam3", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-		currentCam = camFront;
+		camFront = NIVision.IMAQdxOpenCamera("cam3", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		camRight = NIVision.IMAQdxOpenCamera("cam2", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		camBack = NIVision.IMAQdxOpenCamera("cam1", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		camLeft = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		currentCam = camBack;
 		NIVision.IMAQdxConfigureGrab(currentCam);
 		NIVision.IMAQdxStartAcquisition(currentCam);
 		//CameraServer.getInstance().startAutomaticCapture("cam0");;

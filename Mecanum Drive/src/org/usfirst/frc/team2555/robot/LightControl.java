@@ -20,7 +20,7 @@ public class LightControl {
 	public int[] colorValues = 
 		//{0,1,2,3,4,6,8,10,12,14,16,18,20,24,28,32,36,40,45,50,55,60,65,70,75,80,85,90,95,100,110,120,130,140,150,160,170,180,190,200,225,250,275,300,350,400};
 		{
-			0,2,5,10,20,50,150,250,500,750,1000,1500,2000,3000,4000,3000,2000,1500,1000,750,500,250,150,50,20,10,5,2
+			0,1,5,10,20,50,150,250,500,750,1000,1500,2000,3000,4000,3000,2000,1500,1000,750,500,250,150,50,20,10,5,1
 		};
 	protected int stageRed = 0;
 	protected int stageGrn = 0;
@@ -154,7 +154,7 @@ public class LightControl {
 		if (ledTimerRed == -1000) {
 			ledTimerRed = System.currentTimeMillis();
 		}
-		if (System.currentTimeMillis() - ledTimerRed < 500) {
+		if (System.currentTimeMillis() - ledTimerRed > 50) {
 			++stageRed;
 			if (stageRed >= colorValues.length){
 				stageRed -= colorValues.length;
@@ -168,7 +168,7 @@ public class LightControl {
 		if (ledTimerGrn == -1000) {
 			ledTimerGrn = System.currentTimeMillis();
 		}
-		if (System.currentTimeMillis() - ledTimerGrn < 500) {
+		if (System.currentTimeMillis() - ledTimerGrn > 50) {
 			++stageGrn;
 			if (stageGrn >= colorValues.length){
 				stageGrn -= colorValues.length;
@@ -182,7 +182,7 @@ public class LightControl {
 		if (ledTimerBlu == -1000) {
 			ledTimerBlu = System.currentTimeMillis();
 		}
-		if (System.currentTimeMillis() - ledTimerBlu < 500) {
+		if (System.currentTimeMillis() - ledTimerBlu > 50) {
 			++stageBlu;
 			if (stageBlu >= colorValues.length){
 				stageBlu -= colorValues.length;
@@ -191,6 +191,18 @@ public class LightControl {
 			ledTimerBlu = System.currentTimeMillis();
 			System.out.println(stageBlu);
 		}
+	}
+	
+	public void RGBCycle() {
+		if (stageRed == 13 && stageGrn < 13 && stageBlu == 0) {
+			CycleGrn();
+		} //else if (stageRed >= 13)
+	}
+	
+	
+	
+	public void RandomRGB() {
+		// see "RandomRGB pseudocode.txt" on the desktop
 	}
 	
 	/**
