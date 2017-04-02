@@ -28,6 +28,17 @@ public class LightControl {
 	long ledTimerRed = -1000;
 	long ledTimerGrn = -1000;
 	long ledTimerBlu = -1000;
+	long randomTimer;
+	boolean randomInitialized = false;
+	int oldRed;
+	int oldGrn;
+	int oldBlu;
+	int newRed;
+	int newGrn;
+	int newBlu;
+	int currentRed;
+	int currentGrn;
+	int currentBlu;
 	//========================LMAO THE RAW BOUNDS ARE 0-4095 NOT 0-255 IT UNDERFLOWS AT 4096================
 	public LightControl(int redCh, int grnCh, int bluCh){
 		redLight = new PWM(redCh);
@@ -203,6 +214,32 @@ public class LightControl {
 	
 	public void RandomRGB() {
 		// see "RandomRGB pseudocode.txt" on the desktop
+		if (!randomInitialized) {
+			oldRed = 1;
+			oldGrn = 1;
+			oldBlu = 1;
+			newRed = (int) Math.ceil(Math.random() * 4094);
+			newGrn = (int) Math.ceil(Math.random() * 4094);
+			newBlu = (int) Math.ceil(Math.random() * 4094);
+			randomTimer = System.currentTimeMillis();
+			randomInitialized = true;
+		}
+		if (System.currentTimeMillis() - randomTimer < 5000) {
+			currentRed = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newRed - oldRed) + oldRed);
+			currentGrn = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newGrn - oldGrn) + oldGrn);
+			currentBlu = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newBlu - oldBlu) + oldBlu);
+		} else {
+			currentRed = newRed;
+			currentGrn = newGrn;
+			currentBlu = newBlu;
+			oldRed = newRed;
+			oldGrn = newGrn;
+			oldBlu = newBlu;
+			newRed = (int) Math.ceil(Math.random() * 4094);
+			newGrn = (int) Math.ceil(Math.random() * 4094);
+			newBlu = (int) Math.ceil(Math.random() * 4094);
+			randomTimer = System.currentTimeMillis();
+		}
 	}
 	
 	/**
