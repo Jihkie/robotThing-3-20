@@ -72,6 +72,7 @@ public class Robot extends SampleRobot {
 	public static BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
 	public EulerDistanceEstimator euler = new EulerDistanceEstimator(accelerometer, ForwardAxis.NegY);
 	double goalAngle = 0.0;
+	public long rotationTimer = 0;
 	boolean cameraToggle = false;
 	boolean sweeperToggle = false;
 	LightControl LED = new LightControl(0, 1, 2);
@@ -103,8 +104,8 @@ public class Robot extends SampleRobot {
 	
 	public void Throwing(boolean isThrowing) {
 		if (isThrowing){
-			throwLeft.set(-0.6);
-			throwRight.set(0.6);
+			throwLeft.set(-0.5);
+			throwRight.set(0.5);
 		} else if (!isThrowing){
 			throwLeft.set(0.0);
 			throwRight.set(0.0);
@@ -306,7 +307,9 @@ public class Robot extends SampleRobot {
 	//public double BoolToDouble(boolean convertThis) {}
 	
 	public double RotateRobot(double joyRotate, double gyroAngle) {
-		goalAngle += 10 * SpeedPaddle(joyRotate);
+		
+		goalAngle += 0.07 * SpeedPaddle(joyRotate) * (System.currentTimeMillis() - rotationTimer);
+		rotationTimer = System.currentTimeMillis();
 		double adjustment = (goalAngle - gyroAngle) * 0.05;
 		if (-1 <= adjustment && adjustment <= 1) {
 			return adjustment;
@@ -332,7 +335,7 @@ public class Robot extends SampleRobot {
 	}
 	
 	public double SpeedPaddle(double whatYouArePuttingIn) {
-		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.75 * stick1.getZ());
+		return DeadzoneAdjustment(whatYouArePuttingIn, 0.1) * (1 - 0.375 * (stick1.getRawAxis(3) + 1));
 	}
 	
 	/*public void AddEncoderInfo(CANTalon thisMotor, StringBuilder stringIn){
@@ -371,7 +374,7 @@ public class Robot extends SampleRobot {
 		robotDrive.setSafetyEnabled(false);
 		//gyro.reset();
 		goalAngle = 0;
-		
+		gyro.reset();
 		//final CameraServer cams = CameraServer.getInstance();
 		//cams.startAutomaticCapture("cam0");
 		//================we changed this from true because some people on the internet told us to
@@ -402,6 +405,11 @@ public class Robot extends SampleRobot {
 				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
 				break;
 			}
+//			System.out.println(RotateRobot(stick1.getZ(), gyro.getAngle()));
+//			System.out.println(goalAngle);
+//			System.out.println(SpeedPaddle(stick1.getZ()));
+			//System.out.println(stick1.getZ());
+			//System.out.println(DeadzoneAdjustment(stick1.getZ(), 0.1) * (1 - 0.75 * stick1.getZ()));
 			
 			if (DeadzoneAdjustment(stick1.getX(), 0.1) == 0.0 && DeadzoneAdjustment(stick1.getY(), 0.1) == 0.0) {
 				euler.reset();
@@ -432,7 +440,7 @@ public class Robot extends SampleRobot {
 			//buzzer.setRaw(toneValueThing1.intValue());
 			//buzzer.setBounds(2.037*0.2, 1.539*0.2, 1.513*0.2, 1.487*0.2, .989*0.2);
 			euler.update();
-			System.out.println(euler.getDisplacement());
+			//System.out.println(euler.getDisplacement());
 			
 			Climbing(false, stick1.getRawButton(11));
 			Throwing(stick1.getRawButton(1));
@@ -525,12 +533,13 @@ public class Robot extends SampleRobot {
 		gyro.reset();
 		gearArm.GearGrab();
 		while (System.currentTimeMillis() - startTime < 2500) {
-			robotDrive.mecanumDrive_Cartesian(0.0, -0.1, - RotateRobot(0, gyro.getAngle()), 0, false);
+//			robotDrive.mecanumDrive_Cartesian(0.0, -0.1, - RotateRobot(0, gyro.getAngle()), 0, false);
+			robotDrive.mecanumDrive_Cartesian(0.0, -0.1, 0.0, 0, false);
 		}
-		gearArm.GearRelease();
-		while (System.currentTimeMillis() - startTime < 3500) {
+		//gearArm.GearRelease();
+		/*while (System.currentTimeMillis() - startTime < 3500) {
 			robotDrive.mecanumDrive_Cartesian(0.0, 0.1, - RotateRobot(0, gyro.getAngle()), 0, false);
-		}
+		}*/
 		robotDrive.mecanumDrive_Cartesian(0, 0, 0, 0, false);
 	}
 }

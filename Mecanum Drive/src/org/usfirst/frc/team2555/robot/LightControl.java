@@ -156,11 +156,12 @@ public class LightControl {
 		}
 		if (System.currentTimeMillis() - ledTimerRed < 500) {
 			++stageRed;
-			if (stageRed >= 28){
-				stageRed -= 28;
+			if (stageRed >= colorValues.length){
+				stageRed -= colorValues.length;
 			}
 			redLight.setRaw(colorValues[stageRed]);
 			ledTimerRed = System.currentTimeMillis();
+			System.out.println(stageRed);
 		}
 	}
 	public void CycleGrn() {
@@ -169,11 +170,12 @@ public class LightControl {
 		}
 		if (System.currentTimeMillis() - ledTimerGrn < 500) {
 			++stageGrn;
-			if (stageGrn >= 28){
-				stageGrn -= 28;
+			if (stageGrn >= colorValues.length){
+				stageGrn -= colorValues.length;
 			}
 			grnLight.setRaw(colorValues[stageGrn]);
 			ledTimerGrn = System.currentTimeMillis();
+			System.out.println(stageGrn);
 		}
 	}
 	public void CycleBlu() {
@@ -182,11 +184,12 @@ public class LightControl {
 		}
 		if (System.currentTimeMillis() - ledTimerBlu < 500) {
 			++stageBlu;
-			if (stageBlu >= 28){
-				stageBlu -= 28;
+			if (stageBlu >= colorValues.length){
+				stageBlu -= colorValues.length;
 			}
 			bluLight.setRaw(colorValues[stageBlu]);
 			ledTimerBlu = System.currentTimeMillis();
+			System.out.println(stageBlu);
 		}
 	}
 	
