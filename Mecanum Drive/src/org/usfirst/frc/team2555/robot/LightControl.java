@@ -39,6 +39,11 @@ public class LightControl {
 	int currentRed;
 	int currentGrn;
 	int currentBlu;
+	int cycleRed;
+	int cycleGrn;
+	int cycleBlu;
+	int rgbCycleState = 0;
+	long startCycleTime;
 	//========================LMAO THE RAW BOUNDS ARE 0-4095 NOT 0-255 IT UNDERFLOWS AT 4096================
 	public LightControl(int redCh, int grnCh, int bluCh){
 		redLight = new PWM(redCh);
@@ -204,13 +209,74 @@ public class LightControl {
 		}
 	}
 	
+//	public void RGBCycle() {
+//		if (stageRed == 13 && stageGrn < 13 && stageBlu == 0) {
+//			CycleGrn();
+//		} //else if (stageRed >= 13)
+//	}
+	
 	public void RGBCycle() {
-		if (stageRed == 13 && stageGrn < 13 && stageBlu == 0) {
-			CycleGrn();
-		} //else if (stageRed >= 13)
+		//switch ()
+		
+		
+		switch (rgbCycleState) {
+		case 0 :
+			startCycleTime = System.currentTimeMillis();
+			cycleRed = 4095;
+			cycleGrn = 0;
+			cycleBlu = 0;
+			rgbCycleState = 1;
+		case 1 :
+			cycleGrn = (int) (2 * (System.currentTimeMillis() - startCycleTime));
+			if (cycleGrn >= 4095) {
+				cycleGrn = 4095;
+				rgbCycleState = 2;
+				startCycleTime = System.currentTimeMillis();
+			}
+			break;
+		case 2 :
+			cycleRed = (int) (4095 - 2 * (System.currentTimeMillis() - startCycleTime));
+			if (cycleRed <= 0) {
+				cycleRed = 0;
+				rgbCycleState = 3;
+				startCycleTime = System.currentTimeMillis();
+			}
+			break;
+		case 3 :
+			cycleBlu = (int) (2 * (System.currentTimeMillis() - startCycleTime));
+			if (cycleBlu >= 4095) {
+				cycleBlu = 4095;
+				rgbCycleState = 4;
+				startCycleTime = System.currentTimeMillis();
+			}
+			break;
+		case 4 :
+			cycleGrn = (int) (4095 - 2 * (System.currentTimeMillis() - startCycleTime));
+			if (cycleGrn <= 0) {
+				cycleGrn = 0;
+				rgbCycleState = 5;
+				startCycleTime = System.currentTimeMillis();
+			}
+			break;
+		case 5 :
+			cycleRed = (int) (2 * (System.currentTimeMillis() - startCycleTime));
+			if (cycleRed >= 4095) {
+				cycleRed = 4095;
+				rgbCycleState = 6;
+				startCycleTime = System.currentTimeMillis();
+			}
+			break;
+		case 6 :
+			cycleBlu = (int) (4095 - 2 * (System.currentTimeMillis() - startCycleTime));
+			if (cycleBlu <= 0) {
+				cycleBlu = 0;
+				rgbCycleState = 1;
+				startCycleTime = System.currentTimeMillis();
+			}
+			break;
+		}
+		SetLights(cycleRed, cycleGrn, cycleBlu);
 	}
-	
-	
 	
 	public void RandomRGB() {
 		// see "RandomRGB pseudocode.txt" on the desktop
