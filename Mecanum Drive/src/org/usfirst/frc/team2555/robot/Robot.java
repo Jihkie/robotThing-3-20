@@ -76,6 +76,7 @@ public class Robot extends SampleRobot {
 	boolean cameraToggle = false;
 	boolean sweeperToggle = false;
 	LightControl LED = new LightControl(0, 1, 2);
+	public int lightMode = 1;
 	
 	
 	// The channel on the driver station that the joystick is connected to
@@ -521,6 +522,20 @@ public class Robot extends SampleRobot {
 			}
 			if (stick2.getRawButton(5)) {
 				LED.CycleBlu();
+			}
+			
+			if (lightMode == 1) {
+				LED.RandomRGB();
+			} else if (lightMode == 2) {
+				LED.RGBCycle();
+			}
+			
+			if (stick2.getRawButton(8)) {
+				lightMode = 1;
+			}
+			
+			if (stick2.getRawButton(9)) {
+				lightMode = 2;
 			}
 			
 			Timer.delay(0.005); // wait 5ms to avoid hogging CPU cycles
