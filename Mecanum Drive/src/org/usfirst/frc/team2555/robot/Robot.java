@@ -530,14 +530,15 @@ public class Robot extends SampleRobot {
 				LED.RGBCycle();
 			}
 			
-			if (stick2.getRawButton(8)) {
+			if (stick2.getRawButton(8) && !stick2.getRawButton(9)) {
 				lightMode = 1;
 			}
-			
-			if (stick2.getRawButton(9)) {
+			if (stick2.getRawButton(9) && !stick2.getRawButton(8)) {
 				lightMode = 2;
 			}
-			
+			if (stick2.getRawButton(8) && stick2.getRawButton(9)) {
+				lightMode = 3;
+			}
 			Timer.delay(0.005); // wait 5ms to avoid hogging CPU cycles
 		}
 	}

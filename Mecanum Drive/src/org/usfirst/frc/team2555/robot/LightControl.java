@@ -223,8 +223,8 @@ public class LightControl {
 		case 0 :
 			startCycleTime = System.currentTimeMillis();
 			cycleRed = 4095;
-			cycleGrn = 0;
-			cycleBlu = 0;
+			cycleGrn = 1;
+			cycleBlu = 1;
 			rgbCycleState = 1;
 		case 1 :
 			cycleGrn = (int) (2 * (System.currentTimeMillis() - startCycleTime));
@@ -236,8 +236,8 @@ public class LightControl {
 			break;
 		case 2 :
 			cycleRed = (int) (4095 - 2 * (System.currentTimeMillis() - startCycleTime));
-			if (cycleRed <= 0) {
-				cycleRed = 0;
+			if (cycleRed <= 1) {
+				cycleRed = 1;
 				rgbCycleState = 3;
 				startCycleTime = System.currentTimeMillis();
 			}
@@ -252,8 +252,8 @@ public class LightControl {
 			break;
 		case 4 :
 			cycleGrn = (int) (4095 - 2 * (System.currentTimeMillis() - startCycleTime));
-			if (cycleGrn <= 0) {
-				cycleGrn = 0;
+			if (cycleGrn <= 1) {
+				cycleGrn = 1;
 				rgbCycleState = 5;
 				startCycleTime = System.currentTimeMillis();
 			}
@@ -268,8 +268,8 @@ public class LightControl {
 			break;
 		case 6 :
 			cycleBlu = (int) (4095 - 2 * (System.currentTimeMillis() - startCycleTime));
-			if (cycleBlu <= 0) {
-				cycleBlu = 0;
+			if (cycleBlu <= 1) {
+				cycleBlu = 1;
 				rgbCycleState = 1;
 				startCycleTime = System.currentTimeMillis();
 			}
@@ -284,34 +284,41 @@ public class LightControl {
 			oldRed = 1;
 			oldGrn = 1;
 			oldBlu = 1;
-			newRed = (int) Math.ceil(Math.random() * 4094);
-			newGrn = (int) Math.ceil(Math.random() * 4094);
-			newBlu = (int) Math.ceil(Math.random() * 4094);
+			newRed = (int) Math.ceil(Math.random() * 63);
+			newGrn = (int) Math.ceil(Math.random() * 63);
+			newBlu = (int) Math.ceil(Math.random() * 63);
 			randomTimer = System.currentTimeMillis();
 			randomInitialized = true;
 		}
-		if (System.currentTimeMillis() - randomTimer < 5000) {
-			currentRed = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newRed - oldRed) + oldRed);
-			currentGrn = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newGrn - oldGrn) + oldGrn);
-			currentBlu = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newBlu - oldBlu) + oldBlu);
-			redLight.setRaw(currentRed);
-			grnLight.setRaw(currentGrn);
-			bluLight.setRaw(currentBlu);
+		if (System.currentTimeMillis() - randomTimer < 2000) {
+			currentRed = (int) (((System.currentTimeMillis() - randomTimer) * 0.0005) * (newRed - oldRed) + oldRed);
+			currentGrn = (int) (((System.currentTimeMillis() - randomTimer) * 0.0005) * (newGrn - oldGrn) + oldGrn);
+			currentBlu = (int) (((System.currentTimeMillis() - randomTimer) * 0.0005) * (newBlu - oldBlu) + oldBlu);
+			redLight.setRaw(currentRed * currentRed);
+			grnLight.setRaw(currentGrn * currentGrn);
+			bluLight.setRaw(currentBlu * currentBlu);
+			//System.out.println(((System.currentTimeMillis() - randomTimer) * 0.0002) + " - " + currentRed + "," + currentGrn + "," + currentBlu);
 		} else {
 			currentRed = newRed;
 			currentGrn = newGrn;
 			currentBlu = newBlu;
-			redLight.setRaw(currentRed);
-			grnLight.setRaw(currentGrn);
-			bluLight.setRaw(currentBlu);
+			redLight.setRaw(currentRed * currentRed);
+			grnLight.setRaw(currentGrn * currentGrn);
+			bluLight.setRaw(currentBlu * currentBlu);
 			oldRed = newRed;
 			oldGrn = newGrn;
 			oldBlu = newBlu;
-			newRed = (int) Math.ceil(Math.random() * 4094);
-			newGrn = (int) Math.ceil(Math.random() * 4094);
-			newBlu = (int) Math.ceil(Math.random() * 4094);
+			newRed = (int) Math.ceil(Math.random() * 63);
+			newGrn = (int) Math.ceil(Math.random() * 63);
+			newBlu = (int) Math.ceil(Math.random() * 63);
 			randomTimer = System.currentTimeMillis();
 		}
+	}
+	
+	public void LiteralSiezures() {
+		redLight.setRaw((int) (Math.pow(Math.ceil(Math.random()*63), 2)));
+		grnLight.setRaw((int) (Math.pow(Math.ceil(Math.random()*63), 2)));
+		bluLight.setRaw((int) (Math.pow(Math.ceil(Math.random()*63), 2)));
 	}
 	
 	/**
