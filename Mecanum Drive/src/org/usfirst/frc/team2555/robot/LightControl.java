@@ -294,10 +294,16 @@ public class LightControl {
 			currentRed = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newRed - oldRed) + oldRed);
 			currentGrn = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newGrn - oldGrn) + oldGrn);
 			currentBlu = (int) (((System.currentTimeMillis() - randomTimer) / 5000) * (newBlu - oldBlu) + oldBlu);
+			redLight.setRaw(currentRed);
+			grnLight.setRaw(currentGrn);
+			bluLight.setRaw(currentBlu);
 		} else {
 			currentRed = newRed;
 			currentGrn = newGrn;
 			currentBlu = newBlu;
+			redLight.setRaw(currentRed);
+			grnLight.setRaw(currentGrn);
+			bluLight.setRaw(currentBlu);
 			oldRed = newRed;
 			oldGrn = newGrn;
 			oldBlu = newBlu;
