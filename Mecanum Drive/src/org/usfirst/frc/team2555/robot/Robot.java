@@ -387,25 +387,25 @@ public class Robot extends SampleRobot {
 			// This sample does not use field-oriented drive, so the gyro input
 			// is set to zero.
 			
-			switch(cameraNum){
-			case 0 :
-				//robotDrive.mecanumDrive_Cartesian(0, - SpeedPaddle(stick1.getRawAxis(3)) * 0.9, 0, 0, true);
-				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()), - SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
-				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
-				break;
-			case 1 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
-				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
-				break;
-			case 2 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
-				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
-				break;
-			case 3 :
-				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
-				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
-				break;
-			}
+//			switch(cameraNum){
+//			case 0 :
+//				//robotDrive.mecanumDrive_Cartesian(0, - SpeedPaddle(stick1.getRawAxis(3)) * 0.9, 0, 0, true);
+//				robotDrive.mecanumDrive_Cartesian(- SpeedPaddle(stick1.getX()), - SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+//				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getX()), ReturnSomePower(-stick.getY()), ReturnSomePower(stick.getZ()), 0);
+//				break;
+//			case 1 :
+//				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+//				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getY()), ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getZ()), 0);
+//				break;
+//			case 2 :
+//				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+//				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(-stick.getX()), ReturnSomePower(stick.getY()), ReturnSomePower(stick.getZ()), 0);
+//				break;
+//			case 3 :
+//				robotDrive.mecanumDrive_Cartesian(SpeedPaddle(stick1.getX()), SpeedPaddle(stick1.getY()), - RotateRobot(stick1.getZ(), gyro.getAngle()) * 0.5, 0, true);
+//				//robotDrive.mecanumDrive_Cartesian(ReturnSomePower(stick.getY()), ReturnSomePower(stick.getX()), ReturnSomePower(stick.getZ()), 0);
+//				break;
+//			}
 //			System.out.println(RotateRobot(stick1.getZ(), gyro.getAngle()));
 //			System.out.println(goalAngle);
 //			System.out.println(SpeedPaddle(stick1.getZ()));
@@ -528,6 +528,8 @@ public class Robot extends SampleRobot {
 				LED.RandomRGB();
 			} else if (lightMode == 2) {
 				LED.RGBCycle();
+			} else if (lightMode == 3) {
+				LED.LiteralSiezures();
 			}
 			
 			if (stick2.getRawButton(8) && !stick2.getRawButton(9)) {
